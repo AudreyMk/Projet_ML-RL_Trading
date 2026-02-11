@@ -1,0 +1,24 @@
+RAPPORT DE QUALITE - DONNEES M15
+Source: data/processed_data/DAT_MT_GBPUSD_M1_2022_processed.csv
+Date de generation: 2026-02-11 16:45:55
+
+Resume:
+- Lignes M15 avant nettoyage: 34752
+- Valeurs manquantes avant: open     9805
+high     9805
+low      9805
+close    9805
+dtype: int64
+- Valeurs manquantes apres: open     0
+high     0
+low      0
+close    0
+dtype: int64
+- Prix invalides: 0
+- OHLC incoherents: 24947
+- Periode: 2022-01-02 17:00:00 -> 2022-12-30 16:45:00
+
+Couverture M15:
+- Bougies completes (15 minutes): 24243
+- Bougies incompletes (< 15 minutes): 10505
+- Bougies vides: 9805
