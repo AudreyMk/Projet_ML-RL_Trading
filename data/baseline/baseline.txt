@@ -1,0 +1,60 @@
+
+===== 2022 =====
+
+Strategy: random
+cumulative_profit: -2.1101
+max_drawdown: -2.1143
+sharpe: -1.215
+profit_factor: 0.6207
+
+Strategy: rule_based
+cumulative_profit: -0.4392
+max_drawdown: -0.4418
+sharpe: -0.2754
+profit_factor: 0.8835
+
+Strategy: buy_hold
+cumulative_profit: -0.1068
+max_drawdown: -0.2789
+sharpe: -0.0513
+profit_factor: 0.983
+
+===== 2023 =====
+
+Strategy: random
+cumulative_profit: -1.9147
+max_drawdown: -1.9176
+sharpe: -1.8118
+profit_factor: 0.5251
+
+Strategy: rule_based
+cumulative_profit: -0.3506
+max_drawdown: -0.3651
+sharpe: -0.3747
+profit_factor: 0.8575
+
+Strategy: buy_hold
+cumulative_profit: 0.064
+max_drawdown: -0.0862
+sharpe: 0.0508
+profit_factor: 1.0161
+
+===== 2024 =====
+
+Strategy: random
+cumulative_profit: -2.1132
+max_drawdown: -2.1133
+sharpe: -2.4805
+profit_factor: 0.4292
+
+Strategy: rule_based
+cumulative_profit: -0.4499
+max_drawdown: -0.4521
+sharpe: -0.5687
+profit_factor: 0.794
+
+Strategy: buy_hold
+cumulative_profit: -0.0097
+max_drawdown: -0.0732
+sharpe: -0.0093
+profit_factor: 0.9971
