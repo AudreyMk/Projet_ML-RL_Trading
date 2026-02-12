@@ -79,7 +79,7 @@ def resampling(df: pd.DataFrame, freq: str = '15min') -> pd.DataFrame:
         'close': 'last'
     })
 
-    df_resampled.to_csv("data/processed_data/DAT_MT_GBPUSD_M15_2022_M15.csv")  # Sauvegarde du DataFrame resamplé
+    #df_resampled.to_csv("data/processed_data/DAT_MT_GBPUSD_M15_2022_M15.csv")  # Sauvegarde du DataFrame resamplé
     return df_resampled
 
 
@@ -89,7 +89,7 @@ def analyse_m15_data(file_path) -> pd.DataFrame:
     Nettoie les données M15 en supprimant les bougies incomplètes, les prix invalides et les incohérences OHLC.
     """
     df = pd.read_csv(file_path, index_col='timestamp', parse_dates=True)
-    df_m15 = resampling(df)
+    df_m15 = resampling(df) 
 
     n_rows_M15_before = len(df_m15)
     n_nan_before = df_m15.isna().sum()

@@ -29,13 +29,25 @@ def generate_import_report(file_path):
 
 	return report, df 
 
+def process_files(path_list):
+	for path in path_list:
+		file_path = os.path.join("data", "raw", path)
+		report, df = generate_import_report(file_path)
 
-# Remplace le chemin par celui de ton fichier à tester
-file = os.path.join("data", "DAT_MT_GBPUSD_M1_2022.csv")
-rapport, df = generate_import_report(file)
-df.to_csv(os.path.join("data/processed_data", "DAT_MT_GBPUSD_M1_2022_processed.csv"))  # Sauvegarde du DataFrame traité
-print(rapport)
+		base_name = os.path.splitext(path)[0]
+		output_csv = os.path.join("data", "processed_data", base_name + "_processed.csv")
+		df.to_csv(output_csv)
+		print(report)
 
-# Génération du rapport de visualisation
-visualization_report = viz_data_report(df)
-print(visualization_report)
+		visualization_report = viz_data_report(df)
+		print(visualization_report)
+
+
+if __name__ == "__main__":
+	path_list = [
+		"DAT_MT_GBPUSD_M1_2022.csv",
+		"DAT_MT_GBPUSD_M1_2023.csv",
+		"DAT_MT_GBPUSD_M1_2024.csv",
+	]
+	process_files(path_list)
+
