@@ -59,7 +59,3 @@ def clean_m15_data(file_path) -> pd.DataFrame:
         'bougies_m15_vide': bougies_m15_vide
     }
 
-file_path = "data/processed_data/DAT_MT_GBPUSD_M1_2022_processed.csv"
-df_m15_cleaned, m15_report = clean_m15_data(file_path)
-df_m15_cleaned.to_csv("data/processed_data/DAT_MT_GBPUSD_M15_2022_clean.csv")  # Sauvegarde du DataFrame M15 nettoyé
-print(m15_report)
