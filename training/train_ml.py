@@ -5,6 +5,7 @@ on 2022, validates on 2023, tests on 2024. Produces financial metrics via
 the existing backtest and metrics utilities, saves models and a CSV report.
 """
 from pathlib import Path
+import sys
 import pandas as pd
 import numpy as np
 import joblib
@@ -13,6 +14,10 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 import json
+
+PROJECT_ROOT = Path(__file__).parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from evaluation.backtest import run_backtest
 from evaluation.metrics import compute_metrics
@@ -41,7 +46,7 @@ def to_signal(pred):
 
 
 def main():
-    project_root = Path(__file__).parent.parent
+    project_root = PROJECT_ROOT
     years = {'train': 2022, 'val': 2023, 'test': 2024}
 
     df_train = load_features(years['train'])
