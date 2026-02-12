@@ -1,6 +1,6 @@
 RAPPORT DE QUALITE - DONNEES M15
 Source: data/processed_data/DAT_MT_GBPUSD_M1_2022_processed.csv
-Date de generation: 2026-02-11 16:54:11
+Date de generation: 2026-02-12 10:29:35
 
 Resume:
 - Lignes M15 avant nettoyage: 34752
@@ -9,6 +9,7 @@ high     9805
 low      9805
 close    9805
 dtype: int64
+- Lignes M15 apres nettoyage: 24947
 - Valeurs manquantes apres: open     0
 high     0
 low      0
@@ -22,3 +23,9 @@ Couverture M15:
 - Bougies completes (15 minutes): 24243
 - Bougies incompletes (< 15 minutes): 10505
 - Bougies vides: 9805
+
+Analyse des gaps:
+- Seuil retenu: 0.0005883170707908289
+- Frequence: 0.0019387839287187526
+- Decision: CLIPPER (événements rares mais réels)
+- Gaps extremes: 47

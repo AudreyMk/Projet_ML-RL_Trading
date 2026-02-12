@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from processed_data_M15 import clean_m15_data
+from processed_data_M15 import analyse_m15_data
 
 
 def format_quality_report(report, source_path):
@@ -13,6 +13,7 @@ def format_quality_report(report, source_path):
     lines.append("Resume:")
     lines.append("- Lignes M15 avant nettoyage: {}".format(report.get("n_rows_M15_before")))
     lines.append("- Valeurs manquantes avant: {}".format(report.get("n_nan_before")))
+    lines.append("- Lignes M15 apres nettoyage: {}".format(report.get("n_rows_M15_after")))
     lines.append("- Valeurs manquantes apres: {}".format(report.get("n_nan_after")))
     lines.append("- Prix invalides: {}".format(report.get("n_invalid_prices")))
     lines.append("- OHLC incoherents: {}".format(report.get("n_invalid_ohlc")))
@@ -25,6 +26,15 @@ def format_quality_report(report, source_path):
     lines.append("- Bougies completes (15 minutes): {}".format(report.get("bougies_m15_count")))
     lines.append("- Bougies incompletes (< 15 minutes): {}".format(report.get("bougies_m15_inf")))
     lines.append("- Bougies vides: {}".format(report.get("bougies_m15_vide")))
+    lines.append("")
+    lines.append("Analyse des gaps:")
+    gap_report = report.get("gap_analysis_report", {})
+    lines.append("- Seuil retenu: {}".format(gap_report.get("threshold")))
+    lines.append("- Frequence: {}".format(gap_report.get("frequency")))
+    lines.append("- Decision: {}".format(gap_report.get("decision")))
+    extreme_gaps = gap_report.get("extreme_gaps")
+    if extreme_gaps is not None:
+        lines.append("- Gaps extremes: {}".format(len(extreme_gaps)))
 
     return "\n".join(lines)
 
@@ -34,8 +44,8 @@ def generate_quality_report(
     output_csv_path,
     output_report_path
 ):
-    df_m15_cleaned, report = clean_m15_data(file_path)
-    df_m15_cleaned.to_csv(output_csv_path)
+    df_m15, report = analyse_m15_data(file_path)
+    df_m15.to_csv(output_csv_path)
     report_text = format_quality_report(report, file_path)
     with open(output_report_path, "w", encoding="utf-8") as f:
         f.write(report_text)
