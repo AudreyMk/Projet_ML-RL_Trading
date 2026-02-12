@@ -1,0 +1,36 @@
+================================================================================
+RAPPORT ANALYSE EXPLORATOIRE - 2022
+================================================================================
+
+STATISTIQUES DE BASE
+  Nombre de bougies : 24,242
+  Période           : 2022-01-02 18:00:00 → 2022-12-30 16:30:00
+  Prix min          : 1.04000
+  Prix max          : 1.37461
+  Prix moyen        : 1.23631
+
+RENDEMENTS
+  Rendement moyen   : -0.000004
+  Volatilité        : 0.000844
+  Skewness          : -2.2968
+  Kurtosis          : 122.5547
+  Min               : -0.032972
+  Max               : 0.016397
+
+TEST DE STATIONNARITÉ (ADF)
+  Prix:
+    ADF Statistic   : -1.5241
+    p-value         : 0.5216
+    Stationnaire    : NON
+
+  Rendements:
+    ADF Statistic   : -26.4931
+    p-value         : 0.0000
+    Stationnaire    : OUI
+
+PATTERNS HORAIRES
+  Heure la plus volatile : 8h (std=0.001403)
+  Heure la moins volatile: 16h (std=0.000355)
+  Meilleur rendement     : 18h (mean=0.000043)
+
+================================================================================

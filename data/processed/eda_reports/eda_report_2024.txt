@@ -1,0 +1,36 @@
+================================================================================
+RAPPORT ANALYSE EXPLORATOIRE - 2024
+================================================================================
+
+STATISTIQUES DE BASE
+  Nombre de bougies : 23,820
+  Période           : 2024-01-01 17:45:00 → 2024-12-31 16:30:00
+  Prix min          : 1.23011
+  Prix max          : 1.34280
+  Prix moyen        : 1.27817
+
+RENDEMENTS
+  Rendement moyen   : -0.000001
+  Volatilité        : 0.000430
+  Skewness          : -0.3603
+  Kurtosis          : 23.7629
+  Min               : -0.008249
+  Max               : 0.005594
+
+TEST DE STATIONNARITÉ (ADF)
+  Prix:
+    ADF Statistic   : -1.7848
+    p-value         : 0.3880
+    Stationnaire    : NON
+
+  Rendements:
+    ADF Statistic   : -107.8778
+    p-value         : 0.0000
+    Stationnaire    : OUI
+
+PATTERNS HORAIRES
+  Heure la plus volatile : 8h (std=0.000812)
+  Heure la moins volatile: 0h (std=0.000195)
+  Meilleur rendement     : 18h (mean=0.000031)
+
+================================================================================

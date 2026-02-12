@@ -1,0 +1,36 @@
+================================================================================
+RAPPORT ANALYSE EXPLORATOIRE - 2023
+================================================================================
+
+STATISTIQUES DE BASE
+  Nombre de bougies : 21,043
+  Période           : 2023-01-01 19:00:00 → 2023-12-29 16:30:00
+  Prix min          : 1.18117
+  Prix max          : 1.31397
+  Prix moyen        : 1.24294
+
+RENDEMENTS
+  Rendement moyen   : 0.000003
+  Volatilité        : 0.000591
+  Skewness          : -0.0621
+  Kurtosis          : 19.5099
+  Min               : -0.009600
+  Max               : 0.008748
+
+TEST DE STATIONNARITÉ (ADF)
+  Prix:
+    ADF Statistic   : -2.0253
+    p-value         : 0.2756
+    Stationnaire    : NON
+
+  Rendements:
+    ADF Statistic   : -104.5227
+    p-value         : 0.0000
+    Stationnaire    : OUI
+
+PATTERNS HORAIRES
+  Heure la plus volatile : 8h (std=0.001048)
+  Heure la moins volatile: 23h (std=0.000237)
+  Meilleur rendement     : 12h (mean=0.000043)
+
+================================================================================
