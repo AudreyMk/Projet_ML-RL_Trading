@@ -235,3 +235,79 @@ def plot_hourly_patterns(hourly, year, output_dir):
     plt.close()
     
     return str(output_path)
+
+
+def generate_eda_report(df, year, output_dir):
+    """
+    Genere un rapport complet (texte + figure unique avec subplots).
+    Retourne le texte du rapport et le chemin de la figure.
+    """
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    df = compute_returns(df)
+    stats = descriptive_stats(df)
+    adf_price = test_stationarity(df['close'], 'Prix')
+    adf_return = test_stationarity(df['return'], 'Rendements')
+    hourly = hourly_patterns(df)
+
+    report_text = generate_text_report(year, stats, adf_price, adf_return, hourly)
+    report_path = output_dir / f"eda_report_{year}.txt"
+    with open(report_path, 'w', encoding='utf-8') as f:
+        f.write(report_text)
+
+    fig, axes = plt.subplots(4, 2, figsize=(16, 18))
+
+    # Prix
+    axes[0, 0].plot(df.index, df['close'], linewidth=0.8, color='steelblue')
+    axes[0, 0].set_title(f'GBP/USD M15 - {year}', fontweight='bold')
+    axes[0, 0].set_xlabel('Date')
+    axes[0, 0].set_ylabel('Prix')
+    axes[0, 0].grid(True, alpha=0.3)
+
+    # Volatilite rolling
+    df_vol = df['return'].rolling(20).std()
+    axes[0, 1].plot(df.index, df_vol, linewidth=0.8, color='coral')
+    axes[0, 1].set_title(f'{year} - Volatilite Rolling (20 periodes)', fontweight='bold')
+    axes[0, 1].set_xlabel('Date')
+    axes[0, 1].set_ylabel('Volatilite')
+    axes[0, 1].grid(True, alpha=0.3)
+
+    # Distribution rendements
+    axes[1, 0].hist(df['return'].dropna(), bins=100, edgecolor='black', alpha=0.7, color='steelblue')
+    axes[1, 0].set_title(f'{year} - Distribution des Rendements', fontweight='bold')
+    axes[1, 0].set_xlabel('Rendement')
+    axes[1, 0].set_ylabel('Frequence')
+    axes[1, 0].axvline(0, color='red', linestyle='--', linewidth=1)
+
+    # Q-Q plot
+    from scipy import stats as scipy_stats
+    scipy_stats.probplot(df['return'].dropna(), dist="norm", plot=axes[1, 1])
+    axes[1, 1].set_title(f'{year} - Q-Q Plot', fontweight='bold')
+
+    # ACF / PACF
+    plot_acf(df['return'].dropna(), lags=50, ax=axes[2, 0], color='steelblue')
+    axes[2, 0].set_title(f'{year} - Autocorrelation (ACF)', fontweight='bold')
+    plot_pacf(df['return'].dropna(), lags=50, ax=axes[2, 1], color='coral')
+    axes[2, 1].set_title(f'{year} - Autocorrelation Partielle (PACF)', fontweight='bold')
+
+    # Patterns horaires
+    axes[3, 0].bar(hourly['hour'], hourly['mean_return'], color='steelblue', alpha=0.7)
+    axes[3, 0].set_title(f'{year} - Rendement Moyen par Heure', fontweight='bold')
+    axes[3, 0].set_xlabel('Heure')
+    axes[3, 0].set_ylabel('Rendement Moyen')
+    axes[3, 0].axhline(0, color='red', linestyle='--', linewidth=1)
+    axes[3, 0].grid(True, alpha=0.3, axis='y')
+
+    axes[3, 1].bar(hourly['hour'], hourly['volatility'], color='coral', alpha=0.7)
+    axes[3, 1].set_title(f'{year} - Volatilite par Heure', fontweight='bold')
+    axes[3, 1].set_xlabel('Heure')
+    axes[3, 1].set_ylabel('Volatilite')
+    axes[3, 1].grid(True, alpha=0.3, axis='y')
+
+    plt.tight_layout()
+    fig_path = output_dir / f"eda_overview_{year}.png"
+    plt.savefig(fig_path, dpi=150, bbox_inches='tight')
+    plt.close()
+
+    return report_text, str(fig_path)
