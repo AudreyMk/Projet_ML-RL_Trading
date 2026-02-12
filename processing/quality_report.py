@@ -49,24 +49,17 @@ def generate_quality_report(file_path, output_csv_path, output_report_path):
 
 
 if __name__ == "__main__":
-    # Boucle pour traiter les 3 années
-    for year in [2022, 2023, 2024]:
-        print(f"\n{'='*60}")
-        print(f"GÉNÉRATION RAPPORT QUALITÉ M15 - {year}")
-        print(f"{'='*60}")
-        
-        # Chemins des fichiers
-        file_path = os.path.join("data", "processed", f"DAT_MT_GBPUSD_M1_{year}.csv")
-        output_csv_path = os.path.join("data", "processed", f"DAT_MT_GBPUSD_M15_{year}_clean.csv")
-        output_report_path = os.path.join("data", "processed", f"quality_report_{year}.txt")
-        
-        # Génération
-        report_text = generate_quality_report(file_path, output_csv_path, output_report_path)
-        
-        print(f" CSV M15 sauvegardé : {output_csv_path}")
-        print(f" Rapport sauvegardé : {output_report_path}")
-        print(f"\n{report_text}")
-    
-    print(f"\n{'='*60}")
-    print(" TOUS LES RAPPORTS GÉNÉRÉS")
-    print(f"{'='*60}")
+    file_path_list= ["DAT_MT_GBPUSD_M1_2022_processed", "DAT_MT_GBPUSD_M1_2023_processed", "DAT_MT_GBPUSD_M1_2024_processed"]
+    for pat in file_path_list:
+        print()
+        file_path = "data/processed_data/" + pat + ".csv"
+        output_base = pat.replace("_M1_", "_M15_")
+        output_csv_path = "data/processed_data/" + output_base + ".csv"
+        output_report_path = "data/processed_data/" + output_base + "_quality_report.txt"
+
+        report_text = generate_quality_report(
+            file_path,
+            output_csv_path,
+            output_report_path
+        )
+        print(report_text)

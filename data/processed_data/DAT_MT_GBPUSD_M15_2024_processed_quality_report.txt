@@ -1,6 +1,6 @@
 RAPPORT DE QUALITE - DONNEES M15
 Source: data/processed_data/DAT_MT_GBPUSD_M1_2024_processed.csv
-Date de generation: 2026-02-12 12:12:19
+Date de generation: 2026-02-12 15:33:26
 
 Resume:
 - Lignes M15 avant nettoyage: 35040

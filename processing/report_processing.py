@@ -30,32 +30,24 @@ def generate_import_report(file_path):
 	return report, df 
 
 
-# Boucle pour traiter les 3 années
-for year in [2022, 2023, 2024]:
-	print(f"\n{'='*60}")
-	print(f"TRAITEMENT ANNÉE {year}")
-	print(f"{'='*60}")
-	
-	# Chemin du fichier
-	file = os.path.join("data", "raw", f"DAT_MT_GBPUSD_M1_{year}.csv")
-	
-	# Génération du rapport
-	rapport, df = generate_import_report(file)
-	
-	# Sauvegarde du DataFrame traité
-	output = os.path.join("data", "processed", f"DAT_MT_GBPUSD_M1_{year}.csv")
-	df.reset_index().to_csv(output, index=False)
-	print(f" Fichier sauvegardé : {output}")
-	
-	# Affichage du rapport
-	print(f"\nRAPPORT {year}:")
-	print(rapport)
-	
-	# Génération du rapport de visualisation
-	visualization_report = viz_data_report(df)
-	print(f"\nVISUALISATION {year}:")
-	print(visualization_report)
+def process_files(path_list):
+	for path in path_list:
+		file_path = os.path.join("data", "raw", path)
+		report, df = generate_import_report(file_path)
 
-print(f"\n{'='*60}")
-print(" TRAITEMENT TERMINÉ POUR LES 3 ANNÉES")
-print(f"{'='*60}")
+		base_name = os.path.splitext(path)[0]
+		output_csv = os.path.join("data", "processed_data", base_name + "_processed.csv")
+		df.to_csv(output_csv)
+		print(report)
+
+		visualization_report = viz_data_report(df)
+		print(visualization_report)
+
+
+if __name__ == "__main__":
+	path_list = [
+		"DAT_MT_GBPUSD_M1_2022.csv",
+		"DAT_MT_GBPUSD_M1_2023.csv",
+		"DAT_MT_GBPUSD_M1_2024.csv",
+	]
+	process_files(path_list)
