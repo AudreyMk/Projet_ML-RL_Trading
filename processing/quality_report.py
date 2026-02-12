@@ -54,7 +54,7 @@ if __name__ == "__main__":
         print()
         file_path = "data/processed_data/" + pat + ".csv"
         output_base = pat.replace("_M1_", "_M15_")
-        output_csv_path = "data/processed_data/" + output_base + ".csv"
+        output_csv_path = "data/processed_data/" + output_base + "_clean.csv"
         output_report_path = "data/processed_data/" + output_base + "_quality_report.txt"
 
         report_text = generate_quality_report(
