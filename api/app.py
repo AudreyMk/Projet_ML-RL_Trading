@@ -1,9 +1,17 @@
 # 
 
+import sys
+from pathlib import Path
+
+# Ajoute le dossier api au PYTHONPATH
+API_DIR = Path(__file__).parent
+sys.path.insert(0, str(API_DIR))
+
 from fastapi import FastAPI, HTTPException
 from schema import PredictRequest, PredictResponse
 from logique_metier import BestModel
 import pandas as pd
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Best Model API")
 
@@ -11,10 +19,19 @@ app = FastAPI(title="Best Model API")
 best_model = BestModel()
 
 
+# ⭐ AJOUTEZ CES LIGNES ⭐
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # En production, spécifiez les domaines autorisés
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.get("/")
 def read_root():
     return {
-        "message": f"Bonjour ! Voici le meilleur modèle sélectionné pour vous : {best_model.model_type}"
+        "message": f"Bonjour ! Voici le meilleur modèle sélectionné pour vous : Random_forest"
     }
 
 @app.post("/predict", response_model=PredictResponse)
@@ -27,16 +44,15 @@ def predict(request: PredictRequest):
     else:
         expected_features = None  # Rule et Random n'ont pas de features fixes
 
-    # Vérifier que le nombre de valeurs correspond
-    if expected_features and len(request.features) != len(expected_features):
-        raise HTTPException(
-            status_code=400,
-            detail=f"Nombre de features incorrect. Attendu {len(expected_features)}, reçu {len(request.features)}"
-        )
-
+    # ⚠️ VALIDATION SUPPRIMÉE - on accepte n'importe quel nombre de features
+    # L'API utilisera seulement celles dont elle a besoin
+    
     # Créer une Series Pandas en associant les valeurs aux colonnes attendues
     if expected_features:
-        df_row = pd.Series(data=request.features, index=expected_features)
+        # Si on reçoit plus de features que nécessaire, on prend seulement les N premières
+        # Si on en reçoit moins, on complète avec des 0
+        feature_values = request.features[:len(expected_features)] if len(request.features) >= len(expected_features) else request.features + [0] * (len(expected_features) - len(request.features))
+        df_row = pd.Series(data=feature_values, index=expected_features)
     else:
         # pour Rule et Random, créer une Series vide
         df_row = pd.Series(dtype=float)

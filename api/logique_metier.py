@@ -26,9 +26,9 @@ class BestModel:
 
         # Charger le modèle selon son type
         if self.model_type == "RL":
-            self.model = self._load_rl()
+            self._load_rl()
         elif self.model_type == "ML":
-            self.model = self._load_ml()
+            self._load_ml()
         else:
             self.model = None  # Random / Rule
 
@@ -42,7 +42,7 @@ class BestModel:
         self.bins = q_obj["bins"]
         self.features = list(self.bins.keys())
         self.n_actions = 3
-        return "RL_loaded"
+        self.model = "RL_loaded"  # marker pour indiquer que le modèle est chargé
 
     def _load_ml(self):
         import joblib, json
@@ -51,7 +51,6 @@ class BestModel:
         self.scaler = joblib.load(v1_dir / "scaler_v1.pkl")
         meta = json.load(open(v1_dir / "metadata.json"))
         self.feature_list = meta.get("feature_list", [])
-        return "ML_loaded"
 
     def predict(self, df_row: pd.Series):
         if self.model_type == "RL":
