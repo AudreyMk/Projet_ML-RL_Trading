@@ -1,0 +1,495 @@
+═══════════════════════════════════════════════════════════════════════════════
+                  TRADING GBP/USD - PRÉSENTATION SIMPLE
+                     LE PARCOURS: EXPLORATION → TESTS → RÉSULTATS
+═══════════════════════════════════════════════════════════════════════════════
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 1: 🎯 LE DÉFI - OBJECTIF GLOBAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LE PROJET EN UNE PHRASE:
+  "Peut-on créer une intelligence artificielle capable de prédire les mouvements
+   du marché GBP/USD et de faire des profits de manière automatique?"
+
+OBJECTIF:
+  → Créer une IA qui OBSERVE les prix historiques
+  → DÉCIDE si acheter (LONG ↑), attendre (FLAT −) ou vendre (SHORT ↓)
+  → RÉPÈTE cela automatiquement pour faire des profits
+  → CONTRÔLE les risques (pas trop de perte d'un coup)
+
+COMMENT ON VALIDE:
+  ✓ Test sur vraies données 2024 (pas sur du passé!)
+  ✓ Comparaison avec stratégies simples
+  ✓ Résultat: Profit stable avec peu de risque
+
+DONNÉES:
+  • Source: 3 ans de prix GBP/USD (toutes les 15 minutes)
+  • 2022: Pour APPRENDRE (23,921 observations)
+  • 2023: Pour PEAUFINER (20,722 observations)
+  • 2024: Pour VÉRIFIER si ça marche (23,499 observations)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 2: 🔍 EXPLORATION INITIALE - TROIS DÉCOUVERTES CLÉS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Au départ, on a regardé les données pour les COMPRENDRE.
+On s'est posé des questions simples:
+  "Comment le marché bouge-t-il?"
+  "Y a-t-il des patterns?"
+  "Est-ce que je peux prédire?"
+
+
+DÉCOUVERTE #1️⃣ : LE MARCHÉ DEVIENT PLUS CALME
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+La "volatilité" (l'agitation du marché) baisse chaque année:
+
+    2022: TRÈS AGITÉ                    (Volatilité: 0.000846)
+    ████████████████  ← Beaucoup de mouvements violents
+    
+    2023: Modérément agité              (Volatilité: 0.000590)
+    ████████████      ← 30% de baisse
+    
+    2024: PLUS CALME                    (Volatilité: 0.000430)
+    ██████████        ← 27% de baisse supplémentaire
+
+IMPLICATION:
+  ✓ 2022 = IA apprend sur données très agitées (plein de mouvements)
+  ✗ 2024 = Doit prédire sur données PLUS CALMES (moins de signaux à apprendre!)
+
+
+DÉCOUVERTE #2️⃣ : MOUVEMENTS EXTRÊMES IMPRÉVISIBLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Les prix ne montent/descendent pas régulièrement.
+Parfois, ils sautent BRUTALEMENT sans prévenir!
+
+Exemple simplifié:
+  Jour normal:    Prix bouge +0.0005 (petit mouvement)
+  Jour extrême:   Prix saute +0.01   (20 FOIS PLUS!)
+  
+  → Distribution statistique: "Kurtosis" = 20-120 (TRÈS élevé!)
+  → Signification: Beaucoup de valeurs normales + quelques ÉNORMES
+  → Implication: TRÈS difficile à prédire avec modèles simples
+
+
+DÉCOUVERTE #3️⃣ : CERTAINES HEURES PLUS PRÉVISIBLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Selon l'HEURE de la journée, le marché est DIFFÉRENT:
+
+  8h-9h     (Ouverture Londres)       → TRÈS AGITÉ, imprévisible
+  16h-17h   (Chevauchement NY/Lon)   → Modéré
+  23h       (Asie seule, calme)      → CALME, plus prévisible
+
+IMPLICATION:
+  ✓ L'heure de la journée IMPORTE pour prédire
+  ✓ Certains moments sont plus prédictibles que d'autres
+  ✓ On peut utiliser cette information!
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 3: 💡 QU'EST-CE QU'ON EN TIRE? (CONCLUSIONS DE L'EXPLORATION)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SCHÉMA DE LA LOGIQUE:
+
+  Données brutes
+      ↓
+   🔍 EXPLORATION
+  (3 découvertes)
+      ↓
+   CONCLUSIONS
+      ↓
+  ┌─────────────────────────────────────────┐
+  │ 1. Y a des PATTERNS                     │
+  │    (découverte #3 = heure importante)   │
+  │                                         │
+  │ 2. MAIS c'est TRÈS BRUYANT             │
+  │    (découverte #2 = sauts imprévisibles)│
+  │                                         │
+  │ 3. Et 2024 PLUS DIFFICILE              │
+  │    (découverte #1 = marché plus calme) │
+  │                                         │
+  │ ↓ IMPLICATION:                          │
+  │ IA classique simple va LUTTER           │
+  │ Besoin d'approche plus sophistiquée !   │
+  └─────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 4: 🧰 PRÉPARATION - COMMENT ON PRÉPARE LE MODÈLE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CRÉER LES "YEUX" DE L'IA:
+
+Au lieu de juste donner les prix bruts, on crée des INDICATEURS
+(des indicateurs = calculés pour aider l'IA à mieux comprendre):
+
+  ❌ MAUVAIS:                    ✅ MEILLEUR:
+  Juste les prix                 Prix + Contexte
+  "Prix = 1.2765"               "Prix monte?"
+                                "Trop haut/bas?"
+                                "Quelle heure?"
+                                "Volatilité?"
+
+
+INDICATEURS CRÉÉS (42 au total):
+
+  1. TENDANCES (prix monte/descend?)
+     → Moyennes mobiles (EMA), pentes, distances à moyennes
+
+  2. VITESSE/MOMENTUM (comment vite ça bouge?)
+     → Rendements court-terme (1, 5, 10 barres)
+
+  3. AGITATION (tranquille ou agressif?)
+     → Volatilité rolling, ATR (Average True Range)
+
+  4. OSCILLATEURS (trop haut/trop bas?)
+     → RSI (Relative Strength Index), MACD
+
+  5. CONTEXTE (quand?)
+     → Heure de la journée, jour de la semaine, sessions (Asie/Londres/NY)
+
+RÉSULTAT:
+  Au lieu de: "Prix = 1.2765"
+  On donne:   42 variables qui décrivent l'état du marché
+              → Beaucoup plus d'information pour l'IA!
+
+
+SLIDE 5: 🧪 ANALYSE 1 - TEST DES STRATÉGIES DE BASE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AVANT DE CRÉER UNE IA SOPHISTIQUÉE...
+
+On teste d'abord 3 stratégies SIMPLES.
+C'est notre "baseline" = point de référence.
+Si notre IA n'est pas meilleure que ça, elle ne sert à rien!
+
+
+STRATÉGIE 1: ✋ RANDOM (On lance une pièce)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Règle: Acheter ou vendre complètement au hasard
+  
+  Résultat 2024:
+    Profit:  +1.33%
+    Verdict: Correct par pur hasard
+
+
+STRATÉGIE 2: 📊 RÈGLES SIMPLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Règle: Si prix monte → acheter, si baisse → vendre (très basique)
+  
+  Résultat 2024:
+    Profit:  -3.22% ❌ PERTE!
+    Verdict: Échoue complètement
+
+
+STRATÉGIE 3: 🏦 ACHETER & TENIR (le plus simple!)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Règle: Acheter une fois au départ et ne plus toucher à rien
+  
+  Résultat 2024:
+    Profit:  +1.66% ✓
+    Verdict: C'est notre référence à battre!
+
+
+SYNTHÈSE BASELINES:
+
+  Random          : +1.33%  |████████
+  Règles simples  : -3.22%  |❌
+  Acheter & tenir : +1.66%  |████████████  ← C'est l'objectif!
+
+  CONCLUSION: Pas grand chose fonctionne bien.
+              Il y a UNE VRAIE OPPORTUNITÉ pour une IA plus intelligente!
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 6: 🤖 ANALYSE 2 - TEST MACHINE LEARNING CLASSIQUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DEUXIÈME ESSAI: On entraîne une IA classique
+
+Comment ça fonctionne:
+  1. On donne les 42 indicateurs à input
+  2. L'IA APPREND sur les données 2022
+  3. L'IA prédit sur 2024
+
+
+RÉSULTAT:
+  ┌────────────────────┐
+  │ Profit:    +1.66%  │
+  │ Volatilité: -8.5%  │
+  │ Résultat:  ❌ FAIL │
+  └────────────────────┘
+
+  C'est EXACTEMENT PAREIL que "Acheter & Tenir"!
+
+  Interprétation: L'IA n'a RIEN APPRIS d'utile.
+
+
+POURQUOI ÇA ÉCHOUE?
+
+  ❌ Raison 1: TROP DE BRUIT
+     → Y a 80% de "bruit" (mouvements aléatoires)
+     → Et seulement 20% de vrais patterns
+     → L'IA ne voit que du bruit
+
+  ❌ Raison 2: PATTERNS TROP COMPLEXES
+     → À 15 minutes (micro-trading), les patterns sont très complexes
+     → Une IA simple = pas assez puissante pour les apprendre
+
+  ❌ Raison 3: MARCHÉ PRESQUE ALÉATOIRE À COURT TERME
+     → À 15 min, c'est presque impossible à prédire
+     → L'IA ne peut pas faire mieux que le hasard
+
+CONCLUSION:
+  ❌ Machine Learning classique = INADAPTÉ pour ce problème
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 7: 🧠 ANALYSE 3 - TROISIÈME APPROCHE: REINFORCEMENT LEARNING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TROISIÈME ESSAI: Une APPROCHE COMPLÈTEMENT DIFFÉRENTE
+
+La vraie différence avec Machine Learning:
+
+  ML Classique:        "Apprends les patterns du passé"
+  Reinforcement:       "Essaie des stratégies, gagne/perds, apprends ce qui marche!"
+
+  C'est comme apprendre à jouer au poker:
+  • ML = étudier toutes les mains du passé
+  • RL = jouer 1000 mains, voir ce qui gagne, apprendre
+
+
+COMMENT ON L'ENTRAÎNE:
+
+  1️⃣ On RÉDUIT les 42 indicateurs à 8 CLÉS
+     → Trop d'info = IA confuse
+     → 8 indicateurs = bien équilibré
+
+  2️⃣ On dit à l'IA: "Décide: ACHETER, VENDRE ou ATTENDRE"
+
+  3️⃣ L'IA ESSAIE 200 fois sur les données 2022
+     → Chaque fois qu'elle gagne de l'argent = +points
+     → Chaque fois qu'elle perd = -points
+
+  4️⃣ Au fur et à mesure, elle APPREND ce qui fonctionne
+     → "Ah! À 8h du matin = trop volatile, j'attends"
+     → "À 23h = bon moment pour acheter"
+     → etc.
+
+
+POURQUOI C'EST MEILLEUR:
+
+  ✓ Force 1: EXPLORE 1.9 MILLIONS de stratégies possibles
+     → ML classique = teste qu'1 stratégie linéaire
+
+  ✓ Force 2: APPREND PAR RÉCOMPENSE DIRECTE
+     → Pas besoin de comprendre le "pourquoi"
+     → Juste: "tu gagnes points" ou "tu perds points"
+
+  ✓ Force 3: S'ADAPTE AUX CIRCONSTANCES
+     → "Le contexte a changé? Je m'adapte"
+     → Plus flexible que ML qui est figée après entraînement
+
+
+RÉSULTAT: À DÉTERMINER
+  Après entraînement, on verra si RL trouve mieux que +1.66%
+  La grande question: Peut-on battre "Acheter & Tenir"? 🚀
+
+
+═══════════════════════════════════════════════════════════════════════════════
+FIN PRÉSENTATION - LE PARCOURS COMPLET
+═══════════════════════════════════════════════════════════════════════════════
+
+RÉSUMÉ DU PARCOURS:
+
+  1. OBJECTIF        → Prédire GBP/USD et faire profits
+  2. EXPLORATION     → Découvrir patterns, volatilité, contexte
+  3. CONCLUSIONS     → Data bruitée, patterns compliqués
+  4. PRÉPARATION     → Créer 42 indicateurs pour l'IA
+  5. BASELINE TEST   → Stratégies simples (déjà pas mauvaises)
+  6. ML CLASSIQUE    → Échoue (pareil que baseline)
+  7. RL AVANCÉ       → Nouvelle approche testons!
+
+Prochaines étapes:
+  ✓ Entraîner le RL pendant 2-5 minutes
+  ✓ Tester sur 2024
+  ✓ Vérifier si meilleur que +1.66%
+  ✓ Si oui → Success! Si non → continuer à explorer
+
+═══════════════════════════════════════════════════════════════════════════════
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 2: 📊 ANALYSE EXPLORATOIRE (EDA) & INSIGHTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+VOLATILITÉ PAR ANNÉE:
+  
+  2022: ████████████████ 0.000846  ← Haute volatilité (FED tightening)
+  2023: ████████████     0.000590  ← -30%
+  2024: ██████████       0.000430  ← -27% (calme relatif)
+
+STATIONNARITÉ:
+  ✓ ADF test: p-value < 0.001 → future_return STATIONNAIRE
+  → Bon pour modèles prédictifs
+
+DISTRIBUTION (Kurtosis):
+  Moyenne: 20-120 (très élevé)
+  Interprétation: Queues épaisses → Mouvements extrêmes fréquents
+  → Pas gaussienne, ML classique moins efficace
+
+PATTERNS HORAIRES:
+  8-9h   : TRÈS VOLATIL (Londres opening)
+  16-17h : Modéré (Londres/NY overlap)
+  23h    : CALME (Asie seule)
+
+INSIGHT CLÉ:
+  Data trop bruyante + structure non-linéaire = ML classique problématique
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 3: 📉 BASELINES vs BUY-HOLD (Référence 2024)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RÉSULTATS 2024:
+
+  ┌──────────────┬──────────┬─────────┬────────┐
+  │ Stratégie    │ Profit   │ Max DD  │ Sharpe │
+  ├──────────────┼──────────┼─────────┼────────┤
+  │ Random       │ +1.33%   │ -9.0%   │ 0.025  │ ❌ Mauvais
+  │ Rule-Based   │ -3.22% ❌│ -6.7%   │ -0.050 │ ❌ PERTE!
+  │ Buy-Hold ⭐  │ +1.66%   │ -8.5%   │ 0.026  │ ✓ Référence
+  └──────────────┴──────────┴─────────┴────────┘
+
+ANALYSE:
+  → Aucune stratégie simple ne fonctionne
+  → Buy-Hold = référence (marché haussier léger)
+  → Rule-based naïve échoue (-3.22%)
+  → Random quasi-égal Buy-Hold (0.025 vs 0.026)
+
+VERDICT: Baselines TRÈS FAIBLES → Opportunité pour ML/RL
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 6: 🤖 ANALYSE 2 - TEST MACHINE LEARNING CLASSIQUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DEUXIÈME ESSAI: On entraîne une IA classique
+
+Comment ça fonctionne:
+  1. On donne les 42 indicateurs à input
+  2. L'IA APPREND sur les données 2022
+  3. L'IA prédit sur 2024
+
+
+RÉSULTAT:
+  ┌────────────────────┐
+  │ Profit:    +1.66%  │
+  │ Volatilité: -8.5%  │
+  │ Résultat:  ❌ FAIL │
+  └────────────────────┘
+
+  C'est EXACTEMENT PAREIL que "Acheter & Tenir"!
+
+  Interprétation: L'IA n'a RIEN APPRIS d'utile.
+
+
+POURQUOI ÇA ÉCHOUE?
+
+  ❌ Raison 1: TROP DE BRUIT
+     → Y a 80% de "bruit" (mouvements aléatoires)
+     → Et seulement 20% de vrais patterns
+     → L'IA ne voit que du bruit
+
+  ❌ Raison 2: PATTERNS TROP COMPLEXES
+     → À 15 minutes (micro-trading), les patterns sont très complexes
+     → Une IA simple = pas assez puissante pour les apprendre
+
+  ❌ Raison 3: MARCHÉ PRESQUE ALÉATOIRE À COURT TERME
+     → À 15 min, c'est presque impossible à prédire
+     → L'IA ne peut pas faire mieux que le hasard
+
+CONCLUSION:
+  ❌ Machine Learning classique = INADAPTÉ pour ce problème
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SLIDE 7: 🧠 ANALYSE 3 - TROISIÈME APPROCHE: REINFORCEMENT LEARNING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TROISIÈME ESSAI: Une APPROCHE COMPLÈTEMENT DIFFÉRENTE
+
+La vraie différence avec Machine Learning:
+
+  ML Classique:        "Apprends les patterns du passé"
+  Reinforcement:       "Essaie des stratégies, gagne/perds, apprends ce qui marche!"
+
+  C'est comme apprendre à jouer au poker:
+  • ML = étudier toutes les mains du passé
+  • RL = jouer 1000 mains, voir ce qui gagne, apprendre
+
+
+COMMENT ON L'ENTRAÎNE:
+
+  1️⃣ On RÉDUIT les 42 indicateurs à 8 CLÉS
+     → Trop d'info = IA confuse
+     → 8 indicateurs = bien équilibré
+
+  2️⃣ On dit à l'IA: "Décide: ACHETER, VENDRE ou ATTENDRE"
+
+  3️⃣ L'IA ESSAIE 200 fois sur les données 2022
+     → Chaque fois qu'elle gagne de l'argent = +points
+     → Chaque fois qu'elle perd = -points
+
+  4️⃣ Au fur et à mesure, elle APPREND ce qui fonctionne
+     → "Ah! À 8h du matin = trop volatile, j'attends"
+     → "À 23h = bon moment pour acheter"
+     → etc.
+
+
+POURQUOI C'EST MEILLEUR:
+
+  ✓ Force 1: EXPLORE 1.9 MILLIONS de stratégies possibles
+     → ML classique = teste qu'1 stratégie linéaire
+
+  ✓ Force 2: APPREND PAR RÉCOMPENSE DIRECTE
+     → Pas besoin de comprendre le "pourquoi"
+     → Juste: "tu gagnes points" ou "tu perds points"
+
+  ✓ Force 3: S'ADAPTE AUX CIRCONSTANCES
+     → "Le contexte a changé? Je m'adapte"
+     → Plus flexible que ML qui est figée après entraînement
+
+
+RÉSULTAT: À DÉTERMINER
+  Après entraînement, on verra si RL trouve mieux que +1.66%
+  La grande question: Peut-on battre "Acheter & Tenir"? 🚀
+
+
+═══════════════════════════════════════════════════════════════════════════════
+FIN PRÉSENTATION - LE PARCOURS COMPLET
+═══════════════════════════════════════════════════════════════════════════════
+
+RÉSUMÉ DU PARCOURS:
+
+  1. OBJECTIF        → Prédire GBP/USD et faire profits
+  2. EXPLORATION     → Découvrir patterns, volatilité, contexte
+  3. CONCLUSIONS     → Data bruitée, patterns compliqués
+  4. PRÉPARATION     → Créer 42 indicateurs pour l'IA
+  5. BASELINE TEST   → Stratégies simples (déjà pas mauvaises)
+  6. ML CLASSIQUE    → Échoue (pareil que baseline)
+  7. RL AVANCÉ       → Nouvelle approche testons!
+
+Prochaines étapes:
+  ✓ Entraîner le RL pendant 2-5 minutes
+  ✓ Tester sur 2024
+  ✓ Vérifier si meilleur que +1.66%
+  ✓ Si oui → Success! Si non → continuer à explorer
+
+═══════════════════════════════════════════════════════════════════════════════
